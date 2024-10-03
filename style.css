@@ -33,31 +33,37 @@ button:hover {
 #now-playing {
     margin-top: 50px;
     padding: 20px;
+    width: 300px !important; /* Fixed width for the box */
+    height: 300px !important; /* Fixed height for the box */
     border-radius: 20px;
     background: rgba(30, 30, 30, 0.8);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.3s;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#now-playing:hover {
-    transform: scale(1.02);
-}
 
 #track-image {
-    width: 200px;
+    width: 100px; /* Adjusted width for the smaller box */
+    height: 100px; /* Maintain aspect ratio */
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     margin-top: 15px;
 }
 
 #track-name {
-    font-size: 1.8rem;
+    font-size: 1.5rem; /* Adjusted font size */
     margin: 10px 0;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
 }
 
 #artist-name {
-    font-size: 1.2rem;
+    font-size: 1rem; /* Adjusted font size */
     color: #b3b3b3;
     margin: 5px 0;
 }
