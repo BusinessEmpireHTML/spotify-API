@@ -1,6 +1,7 @@
 const client_id = '9fed077914f64b47af4d0a98a545aa50'; // Replace with your Spotify Client ID
 const redirect_uri = 'https://whatchulistening.netlify.app'; // Replace with your redirect URI
 let accessToken = '';
+const updateInterval = 180000; // Update every 5 seconds
 
 // Function to trigger login and authorization
 document.getElementById('login').addEventListener('click', () => {
@@ -16,14 +17,15 @@ window.addEventListener('load', () => {
         accessToken = hash.split('&')[0].split('=')[1];
         sessionStorage.setItem('accessToken', accessToken); // Store in session storage
         getCurrentlyPlaying();
+        setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
     } else {
         accessToken = sessionStorage.getItem('accessToken'); // Retrieve from session storage
         if (accessToken) {
             getCurrentlyPlaying(); // Try fetching if token exists
+            setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
         }
     }
 });
-
 
 // Function to fetch currently playing track
 function getCurrentlyPlaying() {
