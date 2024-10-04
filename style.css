@@ -168,11 +168,11 @@ button:hover {
 .playButton {
     width: 30px;
     height: 30px;
-    justify-content: center;
 }
 
 #preview-button {
     height: 10px;
     width: 10px;
     background: none !important;
+    background: rgba(30, 30, 30, 0.8);
 }
