@@ -43,41 +43,13 @@ function initializeApp() {
     setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
 }
 
-function setupPreviewButton() {
-    const previewButton = document.getElementById('preview-button');
-    previewButton.addEventListener('click', () => {
-        if (isTokenExpired()) {
-            refreshToken();
-            return;
-        }
-
-        fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        })
-        .then(response => {
-            if (response.status === 204 || response.status > 400) {
-                alert('No track currently playing.');
-                return null;
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.item && data.item.preview_url) {
-                const audio = new Audio(data.item.preview_url);
-                audio.play();
-            } else {
-                alert('No preview available for this track.');
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching track preview:', err);
-            alert('Error fetching track preview.');
-        });
-    });
+// Function to initialize the play button
+function initializePlayButton() {
+    const playButton = document.querySelector('.playButton'); // Select the play button image
+    playButton.addEventListener('click', setupPreviewButton); // Add click event to trigger preview
 }
 
+// Call initializePlayButton after fetching the currently playing track
 function getCurrentlyPlaying() {
     if (isTokenExpired()) {
         refreshToken(); // Handle token refresh if expired
@@ -109,8 +81,8 @@ function getCurrentlyPlaying() {
             document.getElementById('artist-name').textContent = artistName;
             document.getElementById('track-image').src = trackImage;
 
-            // Setup the preview button for the current track
-            setupPreviewButton();
+            // Initialize the play button to trigger the preview
+            initializePlayButton();
         }
     })
     .catch(err => {
@@ -120,6 +92,40 @@ function getCurrentlyPlaying() {
         document.getElementById('track-image').src = '';
     });
 }
+
+// Function to handle the song preview
+function setupPreviewButton() {
+    if (isTokenExpired()) {
+        refreshToken();
+        return;
+    }
+
+    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    })
+    .then(response => {
+        if (response.status === 204 || response.status > 400) {
+            alert('No track currently playing.');
+            return null;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.item && data.item.preview_url) {
+            const audio = new Audio(data.item.preview_url);
+            audio.play();
+        } else {
+            alert('No preview available for this track.');
+        }
+    })
+    .catch(err => {
+        console.error('Error fetching track preview:', err);
+        alert('Error fetching track preview.');
+    });
+}
+
 
 
 // Function to check if the token is expired
