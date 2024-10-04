@@ -47,6 +47,7 @@ button:hover {
     margin-right: auto;
 }
 
+
 #track-image {
     width: 130px; /* Adjusted width for the smaller box */
     height: 130px; /* Maintain aspect ratio */
@@ -132,23 +133,15 @@ button:hover {
     display: block; /* Show the dropdown when hovering over the button */
 }
 
-.flex-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 80px;
-}
-
-#top-artists, #top-tracks-container {
+#top-artists {
+    position: absolute; /* Position it in the left corner */
+    top: 80px; /* Adjust the vertical position */
+    left: 20px; /* Adjust the horizontal position */
     background: rgba(30, 30, 30, 0.8);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-#top-artists {
     max-height: 300px; /* Set maximum height */
-    flex: 1; /* Allows it to share space with the other container */
-    margin-right: 10px;
 }
 
 #top-artists h2 {
@@ -157,9 +150,40 @@ button:hover {
     text-align: center;
 }
 
+.artist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.artist-name {
+    font-weight: bold;
+}
+
+.artist-time {
+    color: #b3b3b3;
+}
+
+.playButton {
+    width: 20px;
+    height: 20px;
+}
+
+#preview-button {
+    width: 30px;
+    height: 30px;
+}
+
 #top-tracks-container {
+    position: absolute; /* Position it in the left corner */
+    top: 80px; /* Adjust the vertical position */
+    left: 20px; /* Adjust the horizontal position */
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     max-height: 400px; /* Set maximum height */
-    flex: 1; /* Allows it to share space with the other container */
 }
 
 #top-tracks {
