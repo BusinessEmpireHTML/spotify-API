@@ -1,11 +1,11 @@
 const client_id = '9fed077914f64b47af4d0a98a545aa50'; // Replace with your Spotify Client ID
 const redirect_uri = 'https://whatchulistening.netlify.app'; // Replace with your redirect URI
 let accessToken = '';
-const updateInterval = 180000; // Update every 5 seconds
+const updateInterval = 180000; // Update every 3 minutes
 
 // Function to trigger login and authorization
 document.getElementById('login').addEventListener('click', () => {
-    const scopes = 'user-read-playback-state user-read-currently-playing';
+    const scopes = 'user-read-playback-state user-read-currently-playing user-read-recently-played';
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=token&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent(scopes)}`;
     window.location = authUrl;
 });
@@ -17,11 +17,13 @@ window.addEventListener('load', () => {
         accessToken = hash.split('&')[0].split('=')[1];
         sessionStorage.setItem('accessToken', accessToken); // Store in session storage
         getCurrentlyPlaying();
+        getRecentlyPlayed(); // Fetch recently played tracks
         setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
     } else {
         accessToken = sessionStorage.getItem('accessToken'); // Retrieve from session storage
         if (accessToken) {
             getCurrentlyPlaying(); // Try fetching if token exists
+            getRecentlyPlayed(); // Fetch recently played tracks
             setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
         }
     }
@@ -58,5 +60,42 @@ function getCurrentlyPlaying() {
     })
     .catch(err => {
         console.error('Error fetching currently playing track:', err);
+    });
+}
+
+// Function to fetch recently played tracks
+function getRecentlyPlayed() {
+    fetch('https://api.spotify.com/v1/me/player/recently-played', {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.items.length > 0) {
+            const historyContainer = document.getElementById('recently-played');
+            historyContainer.innerHTML = ''; // Clear previous history
+
+            data.items.forEach(item => {
+                const trackName = item.track.name;
+                const artistName = item.track.artists.map(artist => artist.name).join(', ');
+                const trackImage = item.track.album.images[0].url;
+
+                // Create a new element for the track
+                const trackElement = document.createElement('div');
+                trackElement.className = 'recent-track';
+                trackElement.innerHTML = `
+                    <img src="${trackImage}" alt="${trackName}" class="track-image">
+                    <p class="track-name">${trackName}</p>
+                    <p class="artist-name">${artistName}</p>
+                `;
+                historyContainer.appendChild(trackElement);
+            });
+        } else {
+            document.getElementById('recently-played').textContent = 'No recently played tracks available.';
+        }
+    })
+    .catch(err => {
+        console.error('Error fetching recently played tracks:', err);
     });
 }

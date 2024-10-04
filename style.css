@@ -67,3 +67,33 @@ button:hover {
     color: #b3b3b3;
     margin: 5px 0;
 }
+
+#recently-played {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(30, 30, 30, 0.8);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.recent-track {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.track-image {
+    width: 50px;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.track-name {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.artist-name {
+    font-size: 1rem;
+    color: #b3b3b3;
+}
