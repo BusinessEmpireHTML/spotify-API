@@ -164,3 +164,8 @@ button:hover {
 .artist-time {
     color: #b3b3b3;
 }
+
+.playButton {
+    width: 30px;
+    height: 30px;
+}
