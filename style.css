@@ -183,7 +183,7 @@ button:hover {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    max-height: 300px; /* Set maximum height */
+    max-height: 400px; /* Set maximum height */
 }
 
 #top-tracks {
@@ -199,5 +199,5 @@ button:hover {
 
 .track p {
     font-size: 14px;
-    color: #333;
+    color: #ffffff;
 }
