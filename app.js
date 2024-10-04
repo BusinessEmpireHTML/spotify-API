@@ -40,6 +40,7 @@ function initializeApp() {
     getCurrentlyPlaying();
     getRecentlyPlayed(); // Fetch recently played tracks
     getTopArtists(); // Fetch top artists
+    getTopTracks(); // Fetch top tracks
     setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
 }
 
@@ -220,3 +221,43 @@ function getTopArtists() {
         console.error('Error fetching top artists:', err);
     });
 }
+
+// Fetch user's top tracks
+function getTopTracks() {
+    const url = 'https://api.spotify.com/v1/me/top/tracks';
+    
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}` // Ensure the accessToken is available here
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Pass the fetched top tracks data to be displayed
+        displayTopTracks(data.items);
+    })
+    .catch(error => console.error('Error fetching top tracks:', error));
+}
+
+// Display top tracks in the UI
+function displayTopTracks(tracks) {
+    const topTracksContainer = document.getElementById('top-tracks');
+    topTracksContainer.innerHTML = ''; // Clear any existing content
+
+    tracks.forEach(track => {
+        const trackElement = document.createElement('div');
+        trackElement.classList.add('track');
+
+        // Track name and artist
+        const trackName = document.createElement('p');
+        trackName.textContent = `${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`;
+
+        // Add track to the container
+        trackElement.appendChild(trackName);
+        topTracksContainer.appendChild(trackElement);
+    });
+}
+
+// Call the function to fetch and display top tracks
+getTopTracks();

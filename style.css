@@ -174,3 +174,18 @@ button:hover {
     width: 30px;
     height: 30px;
 }
+
+#top-tracks-container {
+    display: inline-block;
+    margin-left: 50px; /* Adjust spacing between artists and tracks */
+}
+
+.track {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.track p {
+    font-size: 14px;
+    color: #333;
+}
