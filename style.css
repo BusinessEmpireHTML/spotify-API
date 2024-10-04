@@ -166,7 +166,12 @@ button:hover {
 }
 
 .playButton {
-    width: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+#preview-button {
     height: 10px;
-    background-color: transparent;
+    width: 10px;
+    background-color: transparent !important;
 }
