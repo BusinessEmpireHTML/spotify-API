@@ -142,7 +142,6 @@ button:hover {
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     max-height: 300px; /* Set maximum height */
-    overflow-y: auto; /* Enable scrolling if content exceeds max height */
 }
 
 #top-artists h2 {
