@@ -6,7 +6,7 @@ const tokenExpiryBuffer = 60; // Buffer time in seconds
 
 // Function to trigger login and authorization
 document.getElementById('login').addEventListener('click', () => {
-    const scopes = 'user-read-playback-state user-read-currently-playing user-read-recently-played user-read-top';
+    const scopes = 'user-read-playback-state user-read-currently-playing user-read-recently-played user-top-read';
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=token&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent(scopes)}`;
     window.location = authUrl;
 });
