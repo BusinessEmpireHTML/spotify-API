@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
         if (accessToken) {
             getCurrentlyPlaying(); // Try fetching if token exists
             getRecentlyPlayed(); // Fetch recently played tracks
-            setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
+            setInterval(getCurrentlyPlaying, getRecentlyPlayed, updateInterval); // Set interval for updates
         }
     }
 });
