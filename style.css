@@ -132,3 +132,36 @@ button:hover {
 #toggle-recently-played:hover + .dropdown-content {
     display: block; /* Show the dropdown when hovering over the button */
 }
+
+#top-artists {
+    position: absolute; /* Position it in the left corner */
+    top: 80px; /* Adjust the vertical position */
+    left: 20px; /* Adjust the horizontal position */
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-height: 300px; /* Set maximum height */
+    overflow-y: auto; /* Enable scrolling if content exceeds max height */
+}
+
+#top-artists h2 {
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.artist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.artist-name {
+    font-weight: bold;
+}
+
+.artist-time {
+    color: #b3b3b3;
+}

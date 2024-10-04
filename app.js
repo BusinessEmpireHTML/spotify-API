@@ -5,7 +5,7 @@ const updateInterval = 180000; // Update every 3 minutes
 
 // Function to trigger login and authorization
 document.getElementById('login').addEventListener('click', () => {
-    const scopes = 'user-read-playback-state user-read-currently-playing user-read-recently-played';
+    const scopes = 'user-read-playback-state user-read-currently-playing user-read-recently-played user-read-top';
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=token&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=${encodeURIComponent(scopes)}`;
     window.location = authUrl;
 });
@@ -18,13 +18,15 @@ window.addEventListener('load', () => {
         sessionStorage.setItem('accessToken', accessToken); // Store in session storage
         getCurrentlyPlaying();
         getRecentlyPlayed(); // Fetch recently played tracks
+        getTopArtists(); // Fetch top artists
         setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
     } else {
         accessToken = sessionStorage.getItem('accessToken'); // Retrieve from session storage
         if (accessToken) {
             getCurrentlyPlaying(); // Try fetching if token exists
             getRecentlyPlayed(); // Fetch recently played tracks
-            setInterval(getCurrentlyPlaying, getRecentlyPlayed, updateInterval); // Set interval for updates
+            getTopArtists(); // Fetch top artists
+            setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
         }
     }
 });
@@ -76,9 +78,7 @@ function getRecentlyPlayed() {
             const historyContainer = document.getElementById('recently-played');
             historyContainer.innerHTML = ''; // Clear previous history
 
-            // Limit to the top 5 tracks
-            const tracksToShow = data.items.slice(0, 5);
-            tracksToShow.forEach(item => {
+            data.items.forEach(item => {
                 const trackName = item.track.name;
                 const artistName = item.track.artists.map(artist => artist.name).join(', ');
                 const trackImage = item.track.album.images[0].url;
@@ -93,14 +93,6 @@ function getRecentlyPlayed() {
                 `;
                 historyContainer.appendChild(trackElement);
             });
-
-            // Show "View More" link if there are more than 5 tracks
-            const viewMore = document.getElementById('view-more');
-            if (data.items.length > 5) {
-                viewMore.style.display = 'block';
-            } else {
-                viewMore.style.display = 'none';
-            }
         } else {
             document.getElementById('recently-played').textContent = 'No recently played tracks available.';
         }
@@ -110,22 +102,39 @@ function getRecentlyPlayed() {
     });
 }
 
-// Toggle dropdown visibility
-// Toggle dropdown visibility for Recently Played
-document.getElementById('toggle-recently-played').addEventListener('click', () => {
-    const dropdownContent = document.getElementById('recently-played');
-    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-});
-
-// Close dropdown if clicked outside
-window.onclick = function(event) {
-    if (!event.target.matches('#dropdown-btn')) {
-        const dropdowns = document.getElementsByClassName('dropdown-content');
-        for (let i = 0; i < dropdowns.length; i++) {
-            const openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
+// Function to fetch top artists
+function getTopArtists() {
+    fetch('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=long_term', { // Change limit as needed
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
         }
-    }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.items.length > 0) {
+            const artistList = document.getElementById('artist-list');
+            artistList.innerHTML = ''; // Clear previous artists
+
+            data.items.forEach(artist => {
+                const artistName = artist.name;
+                const artistImage = artist.images[0]?.url || '';
+                const artistTime = artist.followers.total; // Placeholder for listening time
+
+                // Create a new element for the artist
+                const artistElement = document.createElement('div');
+                artistElement.className = 'artist';
+                artistElement.innerHTML = `
+                    <img src="${artistImage}" alt="${artistName}" class="track-image" style="width: 30px; height: 30px; border-radius: 50%;">
+                    <p class="artist-name">${artistName}</p>
+                    <p class="artist-time">${artistTime} followers</p>
+                `;
+                artistList.appendChild(artistElement);
+            });
+        } else {
+            document.getElementById('artist-list').textContent = 'No top artists available.';
+        }
+    })
+    .catch(err => {
+        console.error('Error fetching top artists:', err);
+    });
 }
