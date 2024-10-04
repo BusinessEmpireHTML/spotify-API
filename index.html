@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify Now Playing</title>
     <link rel="stylesheet" href="style.css">
-        
 </head>
 <body>
     <h1>Watchu Listening?</h1>
@@ -16,9 +15,16 @@
         <p id="artist-name"></p>
         <img id="track-image" src="" alt="">
     </div>
-    <div id="recently-played">
-        <h2>Recently Played Tracks</h2>
-    </div>    
+    
+    <!-- Dropdown Menu for Recently Played Tracks -->
+    <div id="dropdown" class="dropdown">
+        <button id="dropdown-btn">Recently Played</button>
+        <div id="recently-played-dropdown" class="dropdown-content">
+            <div id="recently-played"></div>
+            <a href="#" id="view-more" style="display: none;">View More</a>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
