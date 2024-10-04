@@ -49,8 +49,8 @@ button:hover {
 
 
 #track-image {
-    width: 100px; /* Adjusted width for the smaller box */
-    height: 100px; /* Maintain aspect ratio */
+    width: 150px; /* Adjusted width for the smaller box */
+    height: 150px; /* Maintain aspect ratio */
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     margin-top: 15px;
