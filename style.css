@@ -169,3 +169,9 @@ button:hover {
     width: 30px;
     height: 30px;
 }
+
+#preview-button {
+    width: 20px;
+    height: 20px;
+    margin-top: 10px;
+}
