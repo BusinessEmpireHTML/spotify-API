@@ -41,6 +41,7 @@ function initializeApp() {
     getRecentlyPlayed(); // Fetch recently played tracks
     getTopArtists(); // Fetch top artists
     fetchTopTracks(); // Fetch top tracks
+    fetchListeningTime(); // Fetch listening time
     setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
 }
 
@@ -253,3 +254,26 @@ function fetchTopTracks() {
 }
 
 fetchTopTracks();
+
+async function fetchListeningTime() {
+    const response = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken // Ensure you have a valid access token
+        }
+    });
+
+    const data = await response.json();
+    let totalListeningTime = 0;
+
+    data.items.forEach(item => {
+        const trackDuration = item.track.duration_ms; // Duration in milliseconds
+        totalListeningTime += Math.round(trackDuration / 60000); // Convert to minutes
+    });
+
+    // Display the total listening time
+    document.getElementById('time-display').innerText = totalListeningTime;
+}
+
+// Call the function to fetch and display listening time
+fetchListeningTime();
