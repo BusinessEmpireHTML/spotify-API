@@ -2,6 +2,7 @@ const client_id = '9fed077914f64b47af4d0a98a545aa50'; // Replace with your Spoti
 const redirect_uri = 'https://whatchulistening.netlify.app'; // Replace with your redirect URI
 let accessToken = '';
 const updateInterval = 180000; // Update every 3 minutes
+const tokenExpiryBuffer = 60; // Buffer time in seconds
 
 // Function to trigger login and authorization
 document.getElementById('login').addEventListener('click', () => {
@@ -16,23 +17,40 @@ window.addEventListener('load', () => {
     if (hash.includes('access_token')) {
         accessToken = hash.split('&')[0].split('=')[1];
         sessionStorage.setItem('accessToken', accessToken); // Store in session storage
-        getCurrentlyPlaying();
-        getRecentlyPlayed(); // Fetch recently played tracks
-        getTopArtists(); // Fetch top artists
-        setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
+        // Store the token expiry time (assuming it's valid for 1 hour)
+        const expiryTime = Math.floor(Date.now() / 1000) + 3600; // Current time + 1 hour
+        sessionStorage.setItem('tokenExpiry', expiryTime);
+        initializeApp();
     } else {
         accessToken = sessionStorage.getItem('accessToken'); // Retrieve from session storage
-        if (accessToken) {
-            getCurrentlyPlaying(); // Try fetching if token exists
-            getRecentlyPlayed(); // Fetch recently played tracks
-            getTopArtists(); // Fetch top artists
-            setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
+        const expiryTime = sessionStorage.getItem('tokenExpiry');
+        if (accessToken && expiryTime > Math.floor(Date.now() / 1000) + tokenExpiryBuffer) {
+            initializeApp(); // Initialize app if the token is valid
+        } else {
+            // Token is expired or not present; redirect to login
+            accessToken = '';
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('tokenExpiry');
+            document.getElementById('track-name').textContent = 'Please log in to Spotify.';
         }
     }
 });
 
+// Initialize app by fetching data
+function initializeApp() {
+    getCurrentlyPlaying();
+    getRecentlyPlayed(); // Fetch recently played tracks
+    getTopArtists(); // Fetch top artists
+    setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
+}
+
 // Function to fetch currently playing track
 function getCurrentlyPlaying() {
+    if (isTokenExpired()) {
+        refreshToken(); // Handle token refresh if expired
+        return;
+    }
+    
     fetch('https://api.spotify.com/v1/me/player/currently-playing', {
         headers: {
             'Authorization': 'Bearer ' + accessToken
@@ -68,9 +86,28 @@ function getCurrentlyPlaying() {
     });
 }
 
+// Function to check if the token is expired
+function isTokenExpired() {
+    const expiryTime = sessionStorage.getItem('tokenExpiry');
+    return expiryTime <= Math.floor(Date.now() / 1000) + tokenExpiryBuffer;
+}
+
+// Function to refresh the token (re-authenticate user)
+function refreshToken() {
+    // Clear current token
+    accessToken = '';
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('tokenExpiry');
+    document.getElementById('track-name').textContent = 'Token expired. Please log in to Spotify.';
+}
 
 // Function to fetch recently played tracks
 function getRecentlyPlayed() {
+    if (isTokenExpired()) {
+        refreshToken();
+        return;
+    }
+    
     fetch('https://api.spotify.com/v1/me/player/recently-played', {
         headers: {
             'Authorization': 'Bearer ' + accessToken
@@ -85,7 +122,7 @@ function getRecentlyPlayed() {
             data.items.forEach(item => {
                 const trackName = item.track.name;
                 const artistName = item.track.artists.map(artist => artist.name).join(', ');
-                const trackImage = item.track.album.images[0].url;
+                const trackImage = item.track.album.images[0]?.url || 'icon.png'; // Fallback image
 
                 // Create a new element for the track
                 const trackElement = document.createElement('div');
@@ -108,7 +145,12 @@ function getRecentlyPlayed() {
 
 // Function to fetch top artists
 function getTopArtists() {
-    fetch('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=long_term', { // Change limit as needed
+    if (isTokenExpired()) {
+        refreshToken();
+        return;
+    }
+    
+    fetch('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=long_term', {
         headers: {
             'Authorization': 'Bearer ' + accessToken
         }
@@ -121,7 +163,7 @@ function getTopArtists() {
 
             data.items.forEach(artist => {
                 const artistName = artist.name;
-                const artistImage = artist.images[0]?.url || '';
+                const artistImage = artist.images[0]?.url || 'path/to/fallback-image.jpg'; // Fallback image
                 const artistTime = artist.followers.total; // Placeholder for listening time
 
                 // Create a new element for the artist
