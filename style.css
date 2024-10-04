@@ -174,30 +174,3 @@ button:hover {
     width: 30px;
     height: 30px;
 }
-
-#top-tracks-container {
-    position: absolute; /* Position it in the left corner */
-    top: 80px; /* Adjust the vertical position */
-    left: 20px; /* Adjust the horizontal position */
-    background: rgba(30, 30, 30, 0.8);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    max-height: 400px; /* Set maximum height */
-}
-
-#top-tracks {
-    margin: 0 0 10px;
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-.track {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
-
-.track p {
-    font-size: 14px;
-    color: #ffffff;
-}
