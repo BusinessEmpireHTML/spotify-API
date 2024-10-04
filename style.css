@@ -176,16 +176,11 @@ button:hover {
 }
 
 #top-tracks-container {
-    display: inline-block;
-    margin-left: 50px; /* Adjust spacing between artists and tracks */
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    text-align: center;
 }
 
-.track {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
-
-.track p {
-    font-size: 14px;
-    color: #333;
+#top-tracks {
+    font-weight: bold;
 }

@@ -224,7 +224,7 @@ function getTopArtists() {
 
 // Fetch user's top tracks
 function getTopTracks() {
-    const url = 'https://api.spotify.com/v1/me/top/tracks';
+    const url = 'https://api.spotify.com/v1/me/top/tracks?limit=5';  // Limit to 5 tracks
     
     fetch(url, {
         method: 'GET',
