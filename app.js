@@ -144,12 +144,8 @@ function getRecentlyPlayed() {
 }
 
 // Function to fetch top artists
+// Function to fetch top artists
 function getTopArtists() {
-    if (isTokenExpired()) {
-        refreshToken();
-        return;
-    }
-    
     fetch('https://api.spotify.com/v1/me/top/artists?limit=5&time_range=long_term', {
         headers: {
             'Authorization': 'Bearer ' + accessToken
@@ -163,8 +159,7 @@ function getTopArtists() {
 
             data.items.forEach(artist => {
                 const artistName = artist.name;
-                const artistImage = artist.images[0]?.url || 'path/to/fallback-image.jpg'; // Fallback image
-                const artistTime = artist.followers.total; // Placeholder for listening time
+                const artistImage = artist.images[0]?.url || '';
 
                 // Create a new element for the artist
                 const artistElement = document.createElement('div');
@@ -172,7 +167,6 @@ function getTopArtists() {
                 artistElement.innerHTML = `
                     <img src="${artistImage}" alt="${artistName}" class="track-image" style="width: 30px; height: 30px; border-radius: 50%;">
                     <p class="artist-name">${artistName}</p>
-                    <p class="artist-time">${artistTime} followers</p>
                 `;
                 artistList.appendChild(artistElement);
             });
