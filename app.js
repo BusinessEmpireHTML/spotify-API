@@ -111,8 +111,10 @@ function getRecentlyPlayed() {
 }
 
 // Toggle dropdown visibility
-document.getElementById('dropdown-btn').addEventListener('click', () => {
-    document.getElementById('recently-played-dropdown').classList.toggle('show');
+// Toggle dropdown visibility for Recently Played
+document.getElementById('toggle-recently-played').addEventListener('click', () => {
+    const dropdownContent = document.getElementById('recently-played');
+    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
 });
 
 // Close dropdown if clicked outside
