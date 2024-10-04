@@ -46,13 +46,13 @@ function getCurrentlyPlaying() {
             document.getElementById('track-image').src = '';
             return null;
         }
-        return response.json(); // Return the response data as JSON
+        return response.json();
     })
     .then(data => {
         if (data && data.item) {
             const trackName = data.item.name;
             const artistName = data.item.artists.map(artist => artist.name).join(', ');
-            const trackImage = data.item.album.images[0].url;
+            const trackImage = data.item.album.images[0]?.url || 'path/to/fallback-image.jpg'; // Fallback image
 
             // Update the UI with the track details
             document.getElementById('track-name').textContent = trackName;
@@ -62,8 +62,12 @@ function getCurrentlyPlaying() {
     })
     .catch(err => {
         console.error('Error fetching currently playing track:', err);
+        document.getElementById('track-name').textContent = 'Error fetching track data';
+        document.getElementById('artist-name').textContent = '';
+        document.getElementById('track-image').src = '';
     });
 }
+
 
 // Function to fetch recently played tracks
 function getRecentlyPlayed() {
