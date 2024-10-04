@@ -40,6 +40,7 @@ function initializeApp() {
     getCurrentlyPlaying();
     getRecentlyPlayed(); // Fetch recently played tracks
     getTopArtists(); // Fetch top artists
+    fetchTopTracks(); // Fetch top tracks
     setInterval(getCurrentlyPlaying, updateInterval); // Set interval for updates
 }
 
@@ -220,3 +221,35 @@ function getTopArtists() {
         console.error('Error fetching top artists:', err);
     });
 }
+
+function fetchTopTracks() {
+    fetch('https://api.spotify.com/v1/me/top/tracks?limit=5', {
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const topTracksDiv = document.getElementById('top-tracks');
+        topTracksDiv.innerHTML = '<h2>Top Tracks</h2>'; // Clear the div and add header
+
+        data.items.forEach(track => {
+            const trackElement = document.createElement('div');
+            trackElement.classList.add('track');
+
+            trackElement.innerHTML = `
+                <div class="track-image">
+                    <img src="${track.album.images[0].url}" alt="${track.name}">
+                </div>
+                <div class="track-info">
+                    <span class="track-name">${track.name}</span>
+                    <span class="track-artist">${track.artists[0].name}</span>
+                </div>
+            `;
+            topTracksDiv.appendChild(trackElement);
+        });
+    })
+    .catch(error => console.error('Error fetching top tracks:', error));
+}
+
+fetchTopTracks();

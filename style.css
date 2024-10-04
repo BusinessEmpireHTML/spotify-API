@@ -174,3 +174,46 @@ button:hover {
     width: 30px;
     height: 30px;
 }
+
+#top-tracks {
+    position: absolute;
+    top: 80px;
+    left: 350px; /* Adjust the left position relative to top artists */
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-height: 300px;
+}
+
+#top-tracks h2 {
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.track {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.track-image img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.track-name {
+    font-weight: bold;
+}
+
+.track-artist {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+}
