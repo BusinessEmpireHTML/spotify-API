@@ -76,7 +76,9 @@ function getRecentlyPlayed() {
             const historyContainer = document.getElementById('recently-played');
             historyContainer.innerHTML = ''; // Clear previous history
 
-            data.items.forEach(item => {
+            // Limit to the top 5 tracks
+            const tracksToShow = data.items.slice(0, 5);
+            tracksToShow.forEach(item => {
                 const trackName = item.track.name;
                 const artistName = item.track.artists.map(artist => artist.name).join(', ');
                 const trackImage = item.track.album.images[0].url;
@@ -91,6 +93,14 @@ function getRecentlyPlayed() {
                 `;
                 historyContainer.appendChild(trackElement);
             });
+
+            // Show "View More" link if there are more than 5 tracks
+            const viewMore = document.getElementById('view-more');
+            if (data.items.length > 5) {
+                viewMore.style.display = 'block';
+            } else {
+                viewMore.style.display = 'none';
+            }
         } else {
             document.getElementById('recently-played').textContent = 'No recently played tracks available.';
         }
@@ -98,4 +108,22 @@ function getRecentlyPlayed() {
     .catch(err => {
         console.error('Error fetching recently played tracks:', err);
     });
+}
+
+// Toggle dropdown visibility
+document.getElementById('dropdown-btn').addEventListener('click', () => {
+    document.getElementById('recently-played-dropdown').classList.toggle('show');
+});
+
+// Close dropdown if clicked outside
+window.onclick = function(event) {
+    if (!event.target.matches('#dropdown-btn')) {
+        const dropdowns = document.getElementsByClassName('dropdown-content');
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
 }
